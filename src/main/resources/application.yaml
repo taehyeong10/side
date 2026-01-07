@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: side
+  datasource:
+    url: jdbc:postgresql://localhost:1234/side
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  docker:
+    compose:
+      # Automatically start Docker Compose services when application starts
+      enabled: true
+      # Lifecycle management: start and stop containers with application
+      lifecycle-management: start_and_stop
+      # File location (defaults to docker-compose.yml in project root)
+      file: docker-compose.yml
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        jdbc:
+          time_zone: UTC
+  # SQL initialization scripts - runs on startup BEFORE Tomcat starts
+  # Spring Boot ensures SQL init completes before web server (Tomcat) starts
+  sql:
+    init:
+      mode: always  # Always run scripts on startup (creates fresh tables)
+      schema-locations: classpath:schema.sql
+      data-locations: classpath:data.sql  # Optional - can be empty
+      continue-on-error: false
