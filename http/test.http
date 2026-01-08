@@ -1,4 +1,55 @@
 ### GET request to example server
 GET localhost:8080/member/1
 
+### GET request with Cookie header
+GET localhost:8080/member/1
+Cookie: sessionId=abc123; token=xyz789
+
+### POST request with Cookie
+POST localhost:8080/api/login
+Content-Type: application/json
+Cookie: sessionId=abc123
+
+{
+  "username": "user",
+  "password": "pass"
+}
+
+### Using Cookie variable (set once, use multiple times)
+@cookie = sessionId=abc123; token=xyz789
+
+GET localhost:8080/member/1
+Cookie: {{cookie}}
+
+GET localhost:8080/member/2
+Cookie: {{cookie}}
+
+### Multiple cookies
+GET localhost:8080/member/1
+Cookie: sessionId=abc123; token=xyz789; userId=12345
+
+### POST text - Save text to Elasticsearch
+POST localhost:8080/text
+Content-Type: application/json
+
+{
+  "memberId": 1,
+  "text": "This is my first text entry"
+}
+
+### POST another text
+POST localhost:8080/text
+Content-Type: application/json
+
+{
+  "memberId": 1,
+  "text": "This is my second text entry"
+}
+
+### GET all texts for member
+GET localhost:8080/member/1/text/
+
+### GET texts for another member
+GET localhost:8080/member/2/text/
+
 ###

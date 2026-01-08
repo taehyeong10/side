@@ -5,7 +5,6 @@ import com.make.side.entity.Member;
 import com.make.side.repository.MemberJpaRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service

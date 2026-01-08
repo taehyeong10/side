@@ -1,6 +1,8 @@
 spring:
   application:
     name: side
+  main:
+    allow-bean-definition-overriding: true
   datasource:
     url: jdbc:postgresql://localhost:1234/side
     username: postgres
@@ -8,11 +10,8 @@ spring:
     driver-class-name: org.postgresql.Driver
   docker:
     compose:
-      # Automatically start Docker Compose services when application starts
       enabled: true
-      # Lifecycle management: start and stop containers with application
       lifecycle-management: start_and_stop
-      # File location (defaults to docker-compose.yml in project root)
       file: docker-compose.yml
   jpa:
     hibernate:
@@ -32,3 +31,12 @@ spring:
       schema-locations: classpath:schema.sql
       data-locations: classpath:data.sql  # Optional - can be empty
       continue-on-error: false
+  # Elasticsearch configuration for 8.15.3 compatibility
+  elasticsearch:
+    uris: http://localhost:9200
+    connection-timeout: 10s
+    socket-timeout: 60s
+  data:
+    elasticsearch:
+      repositories:
+        enabled: true
