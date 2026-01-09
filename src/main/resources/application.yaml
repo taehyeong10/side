@@ -40,3 +40,7 @@ spring:
     elasticsearch:
       repositories:
         enabled: true
+
+# Elasticsearch client configuration (custom property)
+ee:
+  server-url: localhost:9200
