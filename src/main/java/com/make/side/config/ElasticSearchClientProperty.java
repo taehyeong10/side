@@ -1,9 +1,12 @@
 package com.make.side.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = "ee")
+@ConfigurationProperties
 public class ElasticSearchClientProperty {
+
+    @Value(value = "spring.elasticsearch.uris")
     private String serverUrl;
     private String username;
     private String password;

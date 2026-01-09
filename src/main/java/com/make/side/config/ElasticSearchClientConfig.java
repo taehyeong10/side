@@ -4,7 +4,6 @@ import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.client.ClientConfiguration;
-import org.springframework.data.elasticsearch.client.elc.ElasticsearchConfiguration;
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchLegacyRestClientConfiguration;
 
 import java.time.Duration;
