@@ -43,6 +43,9 @@ dependencies {
 	testImplementation 'org.testcontainers:postgresql'
 	testImplementation 'org.testcontainers:junit-jupiter'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	// elastic search test
+	implementation 'org.elasticsearch.client:elasticsearch-rest-client:8.15.3'
 }
 
 tasks.named('test') {
