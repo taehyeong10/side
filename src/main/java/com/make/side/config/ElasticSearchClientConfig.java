@@ -6,12 +6,12 @@ import org.elasticsearch.client.RequestOptions;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.client.ClientConfiguration;
-import org.springframework.data.elasticsearch.client.elc.ElasticsearchLegacyRestClientConfiguration;
+import org.springframework.data.elasticsearch.client.elc.ElasticsearchConfiguration;
 
 @EnableConfigurationProperties(ElasticSearchClientProperty.class)
 @Configuration
 @SuppressWarnings(value = {"removal"})
-public class ElasticSearchClientConfig extends ElasticsearchLegacyRestClientConfiguration {
+public class ElasticSearchClientConfig extends ElasticsearchConfiguration {
     private final ElasticSearchClientProperty elasticSearchClientProperty;
 
     public ElasticSearchClientConfig(ElasticSearchClientProperty elasticSearchClientProperty) {
@@ -34,9 +34,7 @@ public class ElasticSearchClientConfig extends ElasticsearchLegacyRestClientConf
                 .addHeader("User-Agent", "elastic-java/8.15.3 (Java/25.0.1)")
                 .addHeader("Accept", "application/vnd.elasticsearch+json; compatible-with=8")
                 .build();
-        return new RestClientOptions(
-                requestOptions
-                , true);
+        return new RestClientOptions(requestOptions, true);
     }
 //    @Primary
 //    @Bean
