@@ -1,5 +1,8 @@
 package com.make.side.config;
 
+import co.elastic.clients.transport.TransportOptions;
+import co.elastic.clients.transport.rest_client.RestClientOptions;
+import org.elasticsearch.client.RequestOptions;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.client.ClientConfiguration;
@@ -24,6 +27,17 @@ public class ElasticSearchClientConfig extends ElasticsearchLegacyRestClientConf
                 .build();
     }
 
+    @Override
+    public TransportOptions transportOptions() {
+        RequestOptions requestOptions = RequestOptions.DEFAULT.toBuilder()
+                .addHeader("Content-Type", "application/vnd.elasticsearch+json; compatible-with=8")
+                .addHeader("User-Agent", "elastic-java/8.15.3 (Java/25.0.1)")
+                .addHeader("Accept", "application/vnd.elasticsearch+json; compatible-with=8")
+                .build();
+        return new RestClientOptions(
+                requestOptions
+                , true);
+    }
 //    @Primary
 //    @Bean
 //    public RestClient elasticsearchRestClient() {
