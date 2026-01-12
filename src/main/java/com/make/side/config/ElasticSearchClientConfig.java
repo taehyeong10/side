@@ -3,12 +3,12 @@ package com.make.side.config;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.client.ClientConfiguration;
-import org.springframework.data.elasticsearch.client.elc.ElasticsearchLegacyRestClientConfiguration;
+import org.springframework.data.elasticsearch.client.elc.ElasticsearchConfiguration;
 
 @EnableConfigurationProperties(ElasticSearchClientProperty.class)
 @Configuration
 @SuppressWarnings(value = {"removal"})
-public class ElasticSearchClientConfig extends ElasticsearchLegacyRestClientConfiguration {
+public class ElasticSearchClientConfig extends ElasticsearchConfiguration {
     private final ElasticSearchClientProperty elasticSearchClientProperty;
 
     public ElasticSearchClientConfig(ElasticSearchClientProperty elasticSearchClientProperty) {
