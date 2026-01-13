@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.make.side.grpc.generated";
+option java_outer_classname = "MemberProto";
+
+package member;
+
+// Member service definition
+service MemberService {
+  // Get a member by ID
+  rpc GetMember (GetMemberRequest) returns (GetMemberResponse);
+  
+  // Create a new member
+  rpc CreateMember (CreateMemberRequest) returns (CreateMemberResponse);
+  
+  // List all members
+  rpc ListMembers (ListMembersRequest) returns (ListMembersResponse);
+}
+
+// Message definitions
+message Member {
+  int64 id = 1;
+  string name = 2;
+}
+
+message GetMemberRequest {
+  int64 id = 1;
+}
+
+message GetMemberResponse {
+  Member member = 1;
+  bool found = 2;
+}
+
+message CreateMemberRequest {
+  string name = 1;
+}
+
+message CreateMemberResponse {
+  Member member = 1;
+}
+
+message ListMembersRequest {
+  // Empty for now, can add pagination later
+}
+
+message ListMembersResponse {
+  repeated Member members = 1;
+}

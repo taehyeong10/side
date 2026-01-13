@@ -11,7 +11,7 @@ spring:
   docker:
     compose:
       enabled: true
-      lifecycle-management: start_and_stop
+      lifecycle-management: start_only  # Only start if not running, don't stop on exit
       file: docker-compose.yml
   jpa:
     hibernate:
