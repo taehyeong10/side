@@ -40,3 +40,10 @@ spring:
     elasticsearch:
       repositories:
         enabled: true
+
+# gRPC Server Configuration
+grpc:
+  server:
+    port: 9090  # gRPC server port (REST API runs on default 8080)
+    # Optional: enable gRPC reflection for tools like grpcurl
+    enable-reflection: true
