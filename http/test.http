@@ -53,3 +53,49 @@ GET localhost:8080/member/1/text/
 GET localhost:8080/member/2/text/
 
 ###
+
+################################################################################
+# gRPC TESTS (Copy commands to terminal - .http files don't support gRPC natively)
+################################################################################
+
+# Install grpcurl first: brew install grpcurl
+# Make sure your app is running: ./gradlew bootRun
+
+### gRPC - List all services
+# grpcurl -plaintext localhost:9090 list
+
+### gRPC - List MemberService methods
+# grpcurl -plaintext localhost:9090 list member.MemberService
+
+### gRPC - Get member by ID (ID=1)
+# grpcurl -plaintext -d '{"id": 1}' localhost:9090 member.MemberService/GetMember
+
+### gRPC - Get member by ID (ID=2)
+# grpcurl -plaintext -d '{"id": 2}' localhost:9090 member.MemberService/GetMember
+
+### gRPC - Get non-existing member (ID=999)
+# grpcurl -plaintext -d '{"id": 999}' localhost:9090 member.MemberService/GetMember
+
+### gRPC - List all members
+# grpcurl -plaintext -d '{}' localhost:9090 member.MemberService/ListMembers
+
+### gRPC - Create member (UNIMPLEMENTED - will return error)
+# grpcurl -plaintext -d '{"name": "New User"}' localhost:9090 member.MemberService/CreateMember
+
+### gRPC - Describe GetMember method
+# grpcurl -plaintext localhost:9090 describe member.MemberService.GetMember
+
+### gRPC - Verbose output (see request/response details)
+# grpcurl -plaintext -v -d '{"id": 1}' localhost:9090 member.MemberService/GetMember
+
+################################################################################
+# COMPARISON: REST vs gRPC
+################################################################################
+
+### REST API - Get member (port 8080)
+GET localhost:8080/member/1
+
+### gRPC equivalent (copy to terminal)
+# grpcurl -plaintext -d '{"id": 1}' localhost:9090 member.MemberService/GetMember
+
+###

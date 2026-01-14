@@ -21,7 +21,7 @@ public class MemberGrpcService extends MemberServiceGrpc.MemberServiceImplBase {
     
     private final MemberService memberService;
     
-    public MemberGrpcService(MemberService memberService) {
+    public  MemberGrpcService(MemberService memberService) {
         this.memberService = memberService;
     }
     

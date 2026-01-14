@@ -1,0 +1,40 @@
+# gRPC Test Commands - Copy and paste into your terminal
+# Make sure your app is running: ./gradlew bootRun
+# Install grpcurl if needed: brew install grpcurl
+
+# List all services
+grpcurl -plaintext localhost:9090 list
+
+# List MemberService methods
+grpcurl -plaintext localhost:9090 list member.MemberService
+
+# Get member by ID = 1
+grpcurl -plaintext -d '{"id": 1}' localhost:9090 member.MemberService/GetMember
+
+# Get member by ID = 2
+grpcurl -plaintext -d '{"id": 2}' localhost:9090 member.MemberService/GetMember
+
+# Get non-existing member (ID = 999)
+grpcurl -plaintext -d '{"id": 999}' localhost:9090 member.MemberService/GetMember
+
+# List all members
+grpcurl -plaintext -d '{}' localhost:9090 member.MemberService/ListMembers
+
+# Create member (will return UNIMPLEMENTED)
+grpcurl -plaintext -d '{"name": "New User"}' localhost:9090 member.MemberService/CreateMember
+
+# Describe a method
+grpcurl -plaintext localhost:9090 describe member.MemberService.GetMember
+
+# Verbose output
+grpcurl -plaintext -v -d '{"id": 1}' localhost:9090 member.MemberService/GetMember
+
+# With timeout
+grpcurl -plaintext -max-time 5 -d '{"id": 1}' localhost:9090 member.MemberService/GetMember
+
+# Pretty print with jq (install with: brew install jq)
+grpcurl -plaintext -d '{"id": 1}' localhost:9090 member.MemberService/GetMember | jq
+
+# Compare REST vs gRPC
+curl http://localhost:8080/member/1
+grpcurl -plaintext -d '{"id": 1}' localhost:9090 member.MemberService/GetMember

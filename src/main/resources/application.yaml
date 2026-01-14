@@ -40,7 +40,12 @@ spring:
     elasticsearch:
       repositories:
         enabled: true
-
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8180/realms/side-realm
+          jwk-set-uri: http://localhost:8180/realms/side-realm/protocol/openid-connect/certs
 # gRPC Server Configuration
 grpc:
   server:

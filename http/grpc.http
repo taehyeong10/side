@@ -1,0 +1,40 @@
+### IntelliJ HTTP Client - gRPC tests
+# Requirements:
+# 1) App running: ./gradlew bootRun
+# 2) gRPC reflection enabled (already true in application.yaml)
+# 3) Works in IntelliJ/IDEA HTTP client (uses HTTP/2 under the hood)
+
+### gRPC - Get member by ID (existing)
+GRPC grpc://localhost:9090/member.MemberService/GetMember
+Content-Type: application/json
+
+{
+  "id": 1
+}
+
+### gRPC - Get member by ID (non-existing)
+GRPC grpc://localhost:9090/member.MemberService/GetMember
+Content-Type: application/json
+
+{
+  "id": 999
+}
+
+### gRPC - List all members
+GRPC grpc://localhost:9090/member.MemberService/ListMembers
+Content-Type: application/json
+
+{}
+
+### gRPC - Create member (currently UNIMPLEMENTED; expect error)
+GRPC grpc://localhost:9090/member.MemberService/CreateMember
+Content-Type: application/json
+
+{
+  "name": "New User"
+}
+
+### Notes
+# - The GRPC verb is supported by JetBrains HTTP Client (IntelliJ IDEA).
+# - Uses server reflection, so no proto path is needed for these calls.
+# - All calls are plaintext (no TLS) to match local dev settings.
