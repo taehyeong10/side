@@ -1,0 +1,32 @@
+{
+  "realm": "aipub",
+  "enabled": true,
+  "roles": {
+    "realm": [
+      {
+        "name": "member"
+      },
+      {
+        "name": "admin"
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "k8s",
+      "name": "k8s",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": false,
+      "redirectUris": [
+        "/*"
+      ],
+      "webOrigins": [
+        "/*"
+      ]
+    }
+  ]
+}
