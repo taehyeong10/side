@@ -28,4 +28,8 @@ public class Member {
     public Instant getTime() {
         return time;
     }
+
+    Team getTeam() {
+        return new Team(this.name);
+    }
 }
