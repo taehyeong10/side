@@ -1,8 +1,10 @@
 package com.make.side.service;
 
+import com.make.side.dto.PermissionCheckDto;
 import com.make.side.dto.TextRequestDto;
 import com.make.side.dto.TextResponseDto;
 import com.make.side.entity.TextDocument;
+import com.make.side.entity.TextPermission;
 import com.make.side.repository.TextRepository;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +15,14 @@ import java.util.stream.Collectors;
 public class TextService {
 
     private final TextRepository textRepository;
+    private final PermissionService permissionService;
 
-    public TextService(TextRepository textRepository) {
+    public TextService(
+        TextRepository textRepository,
+        PermissionService permissionService
+    ) {
         this.textRepository = textRepository;
+        this.permissionService = permissionService;
     }
 
     public TextResponseDto saveText(TextRequestDto request) {
@@ -24,11 +31,85 @@ public class TextService {
         return toResponseDto(saved);
     }
 
-    public List<TextResponseDto> getTextsByMemberId(Long memberId) {
+    public TextResponseDto getTextById(String textId, Long requestingMemberId) {
+        TextDocument document = textRepository.findById(textId)
+            .orElseThrow(() -> new IllegalArgumentException("Text not found: " + textId));
+
+        // Check READ permission (creator always has access)
+        boolean hasPermission = permissionService.hasPermission(
+            textId,
+            requestingMemberId,
+            document.getMemberId(),
+            TextPermission.OperationType.READ
+        );
+
+        if (!hasPermission) {
+            throw new SecurityException("No permission to read this text");
+        }
+
+        return toResponseDto(document);
+    }
+
+    public List<TextResponseDto> getTextsByMemberId(Long memberId, Long requestingMemberId) {
         List<TextDocument> documents = textRepository.findByMemberId(memberId);
+
+        // Filter by READ permission
         return documents.stream()
-                .map(this::toResponseDto)
-                .collect(Collectors.toList());
+            .filter(doc -> permissionService.hasPermission(
+                doc.getId(),
+                requestingMemberId,
+                doc.getMemberId(),
+                TextPermission.OperationType.READ
+            ))
+            .map(this::toResponseDto)
+            .collect(Collectors.toList());
+    }
+
+    public TextResponseDto updateText(String textId, String newText, Long requestingMemberId) {
+        TextDocument document = textRepository.findById(textId)
+            .orElseThrow(() -> new IllegalArgumentException("Text not found: " + textId));
+
+        // Check EDIT permission (creator always has access)
+        boolean hasPermission = permissionService.hasPermission(
+            textId,
+            requestingMemberId,
+            document.getMemberId(),
+            TextPermission.OperationType.EDIT
+        );
+
+        if (!hasPermission) {
+            throw new SecurityException("No permission to edit this text");
+        }
+
+        document.setText(newText);
+        TextDocument updated = textRepository.save(document);
+        return toResponseDto(updated);
+    }
+
+    public void deleteText(String textId, Long requestingMemberId) {
+        TextDocument document = textRepository.findById(textId)
+            .orElseThrow(() -> new IllegalArgumentException("Text not found: " + textId));
+
+        // Check DELETE permission (creator always has access)
+        boolean hasPermission = permissionService.hasPermission(
+            textId,
+            requestingMemberId,
+            document.getMemberId(),
+            TextPermission.OperationType.DELETE
+        );
+
+        if (!hasPermission) {
+            throw new SecurityException("No permission to delete this text");
+        }
+
+        textRepository.delete(document);
+    }
+
+    public PermissionCheckDto checkPermissions(String textId, Long requestingMemberId) {
+        TextDocument document = textRepository.findById(textId)
+            .orElseThrow(() -> new IllegalArgumentException("Text not found: " + textId));
+
+        return permissionService.getPermissions(textId, requestingMemberId, document.getMemberId());
     }
 
     private TextResponseDto toResponseDto(TextDocument document) {

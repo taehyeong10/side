@@ -1,5 +1,6 @@
 package com.make.side.config;
 
+import com.make.side.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -8,14 +9,16 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
+import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 
 /**
- * Security configuration for Keycloak integration
- * 
+ * Security configuration for Keycloak integration with auto-member creation
+ *
  * This configuration:
  * - Enables JWT-based authentication via Keycloak
- * - Allows public access to health endpoints and actuator
+ * - Auto-creates Member records on first login
+ * - Allows public access to health endpoints
  * - Requires authentication for all other endpoints
  * - Uses stateless sessions (JWT-based)
  */
@@ -24,14 +27,22 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable()) // Disable CSRF for stateless API
             .authorizeHttpRequests(auth -> auth
-                // TODO: Enable authentication in production
-                // For now, allow all requests for development
-                .anyRequest().permitAll()
+                // Public endpoints
+                .requestMatchers("/actuator/health", "/actuator/info").permitAll()
+
+                // All other endpoints require authentication
+                .anyRequest().authenticated()
             )
             .oauth2ResourceServer(oauth2 -> oauth2
                 .jwt(jwt -> jwt
@@ -40,8 +51,10 @@ public class SecurityConfig {
             )
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            );
-        
+            )
+            // Add auto-member creation filter after JWT authentication
+            .addFilterAfter(jwtAuthenticationFilter, BearerTokenAuthenticationFilter.class);
+
         return http.build();
     }
 

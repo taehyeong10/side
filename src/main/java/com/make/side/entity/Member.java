@@ -1,10 +1,10 @@
 package com.make.side.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Member {
@@ -14,8 +14,14 @@ public class Member {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "external_id", unique = true)
+    private String externalId;
+
     @Column(name = "created_at")
     private Instant time;
+
+    @ManyToMany(mappedBy = "members")
+    private Set<Team> teams = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -25,11 +31,19 @@ public class Member {
         return name;
     }
 
+    public String getExternalId() {
+        return externalId;
+    }
+
+    public void setExternalId(String externalId) {
+        this.externalId = externalId;
+    }
+
     public Instant getTime() {
         return time;
     }
 
-    Team getTeam() {
-        return new Team(this.name);
+    public Set<Team> getTeams() {
+        return teams;
     }
 }
