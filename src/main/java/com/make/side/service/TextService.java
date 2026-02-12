@@ -3,13 +3,16 @@ package com.make.side.service;
 import com.make.side.dto.PermissionCheckDto;
 import com.make.side.dto.TextRequestDto;
 import com.make.side.dto.TextResponseDto;
+import com.make.side.dto.TextWithPermissionDto;
 import com.make.side.entity.TextDocument;
 import com.make.side.entity.TextPermission;
 import com.make.side.repository.TextRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class TextService {
@@ -103,6 +106,50 @@ public class TextService {
         }
 
         textRepository.delete(document);
+    }
+
+    public List<TextWithPermissionDto> getReadableTexts(Long requestingMemberId) {
+        // Fetch all texts from Elasticsearch
+        List<TextDocument> allDocuments = StreamSupport
+            .stream(textRepository.findAll().spliterator(), false)
+            .collect(Collectors.toList());
+
+        List<TextWithPermissionDto> result = new ArrayList<>();
+
+        for (TextDocument doc : allDocuments) {
+            boolean canRead = permissionService.hasPermission(
+                doc.getId(), requestingMemberId, doc.getMemberId(),
+                TextPermission.OperationType.READ
+            );
+
+            if (!canRead) {
+                continue;
+            }
+
+            boolean canEdit = permissionService.hasPermission(
+                doc.getId(), requestingMemberId, doc.getMemberId(),
+                TextPermission.OperationType.EDIT
+            );
+
+            boolean canDelete = permissionService.hasPermission(
+                doc.getId(), requestingMemberId, doc.getMemberId(),
+                TextPermission.OperationType.DELETE
+            );
+
+            boolean isCreator = requestingMemberId.equals(doc.getMemberId());
+
+            result.add(new TextWithPermissionDto(
+                doc.getId(),
+                doc.getMemberId(),
+                doc.getText(),
+                doc.getCreatedAt(),
+                canEdit,
+                canDelete,
+                isCreator
+            ));
+        }
+
+        return result;
     }
 
     public PermissionCheckDto checkPermissions(String textId, Long requestingMemberId) {

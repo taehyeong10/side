@@ -3,6 +3,7 @@ package com.make.side.controller;
 import com.make.side.dto.PermissionCheckDto;
 import com.make.side.dto.TextRequestDto;
 import com.make.side.dto.TextResponseDto;
+import com.make.side.dto.TextWithPermissionDto;
 import com.make.side.security.AuthenticationHelper;
 import com.make.side.service.TextService;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,13 @@ public class TextController {
     public TextController(TextService textService, AuthenticationHelper authHelper) {
         this.textService = textService;
         this.authHelper = authHelper;
+    }
+
+    @GetMapping("/readable")
+    public ResponseEntity<List<TextWithPermissionDto>> getReadableTexts() {
+        Long currentMemberId = authHelper.getCurrentMemberId();
+        List<TextWithPermissionDto> texts = textService.getReadableTexts(currentMemberId);
+        return ResponseEntity.ok(texts);
     }
 
     @PostMapping
