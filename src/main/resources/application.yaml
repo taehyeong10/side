@@ -46,6 +46,19 @@ spring:
         jwt:
           issuer-uri: http://localhost:8180/realms/side-realm
           jwk-set-uri: http://localhost:8180/realms/side-realm/protocol/openid-connect/certs
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
+
+# 헬스체크 전용 커넥터 포트 (메인 Tomcat의 추가 커넥터, 별도 스레드풀)
+server:
+  health-port: 8081
+
 # gRPC Server Configuration
 grpc:
   server:

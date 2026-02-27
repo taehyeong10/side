@@ -1,0 +1,15 @@
+###
+### [8081] 헬스체크 → 200 OK
+GET http://localhost:8081/actuator/health
+
+###
+### [8080] Slow 엔드포인트 (스레드 점유용, test 프로필에서만 활성화)
+GET http://localhost:8080/slow
+
+###
+### [8080] Actuator 차단 확인 → 404
+GET http://localhost:8080/actuator/health
+
+###
+### [8081] Health 외 차단 확인 → 403
+GET http://localhost:8081/slow

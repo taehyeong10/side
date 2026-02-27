@@ -39,6 +39,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	
 	// Elasticsearch 8.15.3 Java client dependencies - explicit versions
 	implementation 'co.elastic.clients:elasticsearch-java:8.15.3'
