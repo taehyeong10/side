@@ -10,7 +10,7 @@ GRANT ALL ON SCHEMA public TO public;
 
 -- Member table (updated with external_id for Keycloak mapping)
 CREATE TABLE member (
-    id bigint PRIMARY KEY,
+    id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     external_id VARCHAR(255) UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

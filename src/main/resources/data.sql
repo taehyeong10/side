@@ -3,10 +3,10 @@
 -- Add your initial data inserts here
 
 -- Sample members (external_id will be set on first login via Keycloak)
-INSERT INTO member(id, name) VALUES
-    (1, 'John Doe'),
-    (2, 'Jane Smith'),
-    (3, 'Bob Johnson');
+INSERT INTO member(name) VALUES
+    ('John Doe'),
+    ('Jane Smith'),
+    ('Bob Johnson');
 
 -- Sample team hierarchy (3 layers: 0=root, 1=division, 2=leaf)
 INSERT INTO team(id, name, parent_id, is_leaf) VALUES

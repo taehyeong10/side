@@ -42,6 +42,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // Public endpoints
                 .requestMatchers("/actuator/health", "/actuator/info").permitAll()
+                .requestMatchers(org.springframework.http.HttpMethod.POST, "/member").permitAll()
 
                 // All other endpoints require authentication
                 .anyRequest().authenticated()

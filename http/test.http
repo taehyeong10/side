@@ -52,6 +52,15 @@ GET localhost:8080/member/1/text/
 ### GET texts for another member
 GET localhost:8080/member/2/text/
 
+
+### POST another member
+POST localhost:8080/member
+Content-Type: application/json
+
+{
+  "name": "hello http"
+}
+
 ###
 
 ################################################################################
